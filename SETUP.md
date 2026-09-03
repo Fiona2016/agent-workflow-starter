@@ -19,6 +19,8 @@ cd ~/workspace/vault && git init && git add -A && git commit -m "init vault"
 
 用 Obsidian「打开文件夹作为仓库」打开 `~/workspace/vault`，启用 Kanban 插件，打开 `plans/board.md` 应看到五列看板。
 
+模板里带了 `.obsidian/`：CSS 片段 `print-clean.css` 已默认启用（排版 + PDF 分页控制 + mermaid 灰阶，说明见 [README](README.md#obsidian-的两处改造)），PDF 导出页边距设为 0（由 CSS 接管）。不想要就到「设置 → 外观 → CSS 片段」关掉。
+
 ### 2. 装 skills（软链，git pull 自动更新）
 
 ```bash

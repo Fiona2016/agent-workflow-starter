@@ -72,6 +72,32 @@ sequenceDiagram
 
 Codex 这条最容易踩：skill 装好了模型能自己调用（你说"处理一下批注"它知道），但手打 `/comments` 找不到。补一个几行的转发文件即可，见 [SETUP.md](SETUP.md) 第 4 步。
 
+## Obsidian 的两处改造
+
+vault 模板自带一份 CSS 片段 `print-clean.css`（已在 `appearance.json` 里启用，复制模板即生效）。它管两件事：
+
+### 1. 排版与 PDF 导出
+
+层次靠**字号和留白**撑，不靠色块和装饰：标题用等宽字体带来终端观感、字号差克制，表格只留细横线不加斑马纹，引用块一条竖线不加底色。
+
+导出 PDF 时的关键在 `@media print` 那一段：
+
+- 标题不落在页尾成为孤行
+- **图表、表格、代码块不被分页切断**——这条最实用，长文档导出时不会出现半张表格跨页
+- 强制浅色，避免误用暗色主题导出成黑底
+
+配合 `app.json` 里 `margin: "0"`（页边距交给 CSS 控制，不由 Obsidian 叠加）。
+
+### 2. mermaid 收成灰阶
+
+agent 写的文档里 mermaid 图很多，默认配色偏花，一页里几张图会互相打架。这份 CSS 把 mermaid 收成白灰阶：
+
+**形状和文字承担语义，颜色只负责层次，不负责表意。** 判断节点（菱形）靠形状加深浅区分，而不是靠红绿；连线上的文字加白底小块压住穿过的线，避免叠字。
+
+> 实现上有个坑：文档里写 `style X fill:#ffdddd` 会变成 SVG 内联样式，优先级高于外部 CSS，所以这一段必须用 `!important` 才压得住。
+
+另外 Live Preview（编辑视图）用的是另一套 CodeMirror 类名，和阅读视图的选择器不通用，所以文件里两套样式各写了一份——改的时候记得两边都改。
+
 ## 几条设计原则（为什么这么定）
 
 - **一卡一工作会话**：卡是任务的账本，会话是干活的现场；一对一才能让回写和回溯不糊。会话内部开子 agent 并行干活是实现细节，不违反此规则。
@@ -86,11 +112,11 @@ Codex 这条最容易踩：skill 装好了模型能自己调用（你说"处理�
 ```
 agent-workflow-starter/
 ├── SETUP.md            # 10 分钟装机指南 ← 从这里开始
-├── AGENTS-snippet.md   # 看板协议（append 到 claude/codex 全局指令）
+├── AGENTS-snippet.md   # 看板协议（append 到各 agent 的全局指令）
 ├── docs/               # 批注协作详解
 ├── skills/             # card / today / done / note / comments
 ├── bin/sync-skills.sh  # 软链安装，git pull 自动更新
-└── vault-template/     # vault 骨架：五列看板 + 任务卡模板 + README
+└── vault-template/     # vault 骨架：五列看板 + 任务卡模板 + Obsidian 配置与 CSS
 ```
 
 安装见 [SETUP.md](SETUP.md)。

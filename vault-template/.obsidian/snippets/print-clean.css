@@ -1,0 +1,323 @@
+/* ============================================================
+   print-clean.css — 极简阅读 / PDF 导出样式
+   思路：层次靠字号与留白撑，不靠色块与装饰；
+        导出 PDF 时图表、表格、代码块不被分页切断。
+   启用：设置 → 外观 → CSS 片段 → 刷新 → 打开开关
+   ============================================================ */
+
+.markdown-preview-view,
+.markdown-rendered {
+  --pc-ink:    #1c1c1e;
+  --pc-muted:  #6b6b70;
+  --pc-rule:   #dcdcd8;
+  --pc-accent: #2b6a94;
+  --pc-code-bg:#f6f6f3;
+
+  font-size: 15px;
+  line-height: 1.78;
+  color: var(--pc-ink);
+}
+
+/* ---------- 标题：等宽字体带来终端观感，字号差克制 ---------- */
+.markdown-preview-view :is(h1,h2,h3,h4),
+.markdown-rendered :is(h1,h2,h3,h4) {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.markdown-preview-view h1, .markdown-rendered h1 {
+  font-size: 1.55em;
+  margin: 0 0 0.9em;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid var(--pc-rule);
+}
+.markdown-preview-view h2, .markdown-rendered h2 {
+  font-size: 1.22em;
+  margin: 2.2em 0 0.7em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--pc-rule);
+  color: var(--pc-accent);
+}
+.markdown-preview-view h3, .markdown-rendered h3 {
+  font-size: 1.06em;
+  margin: 1.8em 0 0.5em;
+}
+.markdown-preview-view h4, .markdown-rendered h4 {
+  font-size: 1em;
+  margin: 1.4em 0 0.4em;
+  color: var(--pc-muted);
+}
+
+/* ---------- 正文 ---------- */
+.markdown-preview-view p, .markdown-rendered p { margin: 0.85em 0; }
+.markdown-preview-view strong, .markdown-rendered strong { font-weight: 650; }
+
+/* ---------- 代码：朴素，无花哨 ---------- */
+.markdown-preview-view :not(pre) > code,
+.markdown-rendered :not(pre) > code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.88em;
+  background: rgb(243, 244, 246);
+  border: none;
+  border-radius: 0.8125rem;
+  padding: 0.15em 0.55em;
+}
+.markdown-preview-view pre, .markdown-rendered pre {
+  background: transparent;
+  border: 1px solid var(--pc-rule);
+  border-radius: 4px;
+  padding: 0.9em 1.1em;
+  font-size: 0.86em;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+.markdown-preview-view pre code, .markdown-rendered pre code {
+  background: none; border: none; padding: 0;
+}
+
+/* ---------- 引用块：一条竖线，不加底色 ---------- */
+.markdown-preview-view blockquote, .markdown-rendered blockquote {
+  margin: 1.1em 0;
+  padding: 0.1em 0 0.1em 1.1em;
+  border-left: 3px solid var(--pc-accent);
+  background: none;
+  color: var(--pc-ink);
+}
+
+/* ---------- 表格：细横线，无斑马纹 ---------- */
+.markdown-preview-view table, .markdown-rendered table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92em;
+  margin: 1.2em 0;
+}
+.markdown-preview-view :is(th,td), .markdown-rendered :is(th,td) {
+  border: none;
+  border-bottom: 1px solid var(--pc-rule);
+  padding: 0.5em 0.7em;
+  text-align: left;
+  vertical-align: top;
+}
+.markdown-preview-view th, .markdown-rendered th {
+  border-bottom: 2px solid var(--pc-rule);
+  font-weight: 650;
+  white-space: nowrap;
+}
+.markdown-preview-view tbody tr:last-child :is(th,td),
+.markdown-rendered tbody tr:last-child :is(th,td) { border-bottom: none; }
+
+/* ---------- 列表 ---------- */
+.markdown-preview-view :is(ul,ol), .markdown-rendered :is(ul,ol) { padding-left: 1.5em; }
+.markdown-preview-view li, .markdown-rendered li { margin: 0.3em 0; }
+
+/* ---------- 分隔线 ---------- */
+.markdown-preview-view hr, .markdown-rendered hr {
+  border: none;
+  border-top: 1px solid var(--pc-rule);
+  margin: 2.2em 0;
+}
+
+/* ---------- mermaid 图：居中、留白 ---------- */
+.markdown-preview-view .mermaid, .markdown-rendered .mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 1.4em 0;
+}
+.markdown-preview-view .mermaid svg, .markdown-rendered .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ============================================================
+   打印 / 导出 PDF —— 这一段是重点
+   ============================================================ */
+@media print {
+  /* 标题不要落在页尾成为孤行 */
+  .markdown-preview-view :is(h1,h2,h3,h4),
+  .markdown-rendered :is(h1,h2,h3,h4) {
+    break-after: avoid-page;
+    page-break-after: avoid;
+  }
+
+  /* 图表、表格、代码块不要被分页切断 */
+  .markdown-preview-view :is(pre, table, .mermaid, blockquote),
+  .markdown-rendered :is(pre, table, .mermaid, blockquote) {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* 表格行本身也不要断开 */
+  .markdown-preview-view tr, .markdown-rendered tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* 打印时统一为浅色，避免误用暗色主题导出成黑底 */
+  .markdown-preview-view, .markdown-rendered {
+    background: #fff !important;
+    color: #1c1c1e !important;
+  }
+}
+
+/* ============================================================
+   Live Preview / 编辑视图（CodeMirror 6）
+   Obsidian 默认是 Live Preview，用的是另一套类名，
+   上面那些 .markdown-preview-view 选择器在这里不生效，需单独写。
+   ============================================================ */
+
+.markdown-source-view.mod-cm6 .cm-content {
+  font-size: 15px;
+  line-height: 1.78;
+  --pc-ink:    #1c1c1e;
+  --pc-muted:  #6b6b70;
+  --pc-rule:   #dcdcd8;
+  --pc-accent: #2b6a94;
+  --pc-code-bg:#f6f6f3;
+}
+
+/* ---------- 标题：与阅读视图保持一致 ---------- */
+.markdown-source-view.mod-cm6 :is(.cm-header-1,.cm-header-2,.cm-header-3,.cm-header-4) {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+.markdown-source-view.mod-cm6 .cm-header-1 { font-size: 1.55em; }
+.markdown-source-view.mod-cm6 .cm-header-2 { font-size: 1.22em; color: var(--pc-accent); }
+.markdown-source-view.mod-cm6 .cm-header-3 { font-size: 1.06em; }
+.markdown-source-view.mod-cm6 .cm-header-4 { font-size: 1em; color: var(--pc-muted); }
+
+/* 标题行的上下留白，模拟阅读视图的节奏 */
+.markdown-source-view.mod-cm6 .HyperMD-header-1 { margin-bottom: 0.5em; }
+.markdown-source-view.mod-cm6 .HyperMD-header-2 { margin-top: 1.6em; }
+.markdown-source-view.mod-cm6 .HyperMD-header-3 { margin-top: 1.2em; }
+
+/* ---------- 内联代码 ---------- */
+.markdown-source-view.mod-cm6 .cm-inline-code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.88em;
+  background: rgb(243, 244, 246);
+  border: none;
+  border-radius: 0.8125rem;
+  padding: 0.15em 0.55em;
+}
+
+/* ---------- 代码块 ---------- */
+.markdown-source-view.mod-cm6 .HyperMD-codeblock {
+  background: transparent;
+  font-size: 0.86em;
+  line-height: 1.6;
+}
+.markdown-source-view.mod-cm6 .HyperMD-codeblock-begin {
+  border-top: 1px solid var(--pc-rule);
+  border-radius: 4px 4px 0 0;
+  padding-top: 0.5em;
+}
+.markdown-source-view.mod-cm6 .HyperMD-codeblock-end {
+  border-bottom: 1px solid var(--pc-rule);
+  border-radius: 0 0 4px 4px;
+  padding-bottom: 0.5em;
+}
+
+/* ---------- 引用块 ---------- */
+.markdown-source-view.mod-cm6 .HyperMD-quote {
+  border-left: 3px solid var(--pc-accent);
+  padding-left: 1.1em;
+  background: none;
+}
+
+/* ---------- 分隔线 ---------- */
+.markdown-source-view.mod-cm6 .cm-hmd-barelink,
+.markdown-source-view.mod-cm6 hr {
+  border-color: var(--pc-rule);
+}
+
+/* ============================================================
+   暗色模式保护
+   上面的配色是为浅色设计的（近黑文字 + 象牙底）。
+   万一在暗色主题下打开，这里让颜色退回主题自身变量，
+   避免出现"黑字黑底"看不见的情况。结构样式不受影响。
+   ============================================================ */
+.theme-dark .markdown-preview-view,
+.theme-dark .markdown-rendered,
+.theme-dark .markdown-source-view.mod-cm6 .cm-content {
+  --pc-ink:     var(--text-normal);
+  --pc-muted:   var(--text-muted);
+  --pc-rule:    var(--background-modifier-border);
+  --pc-accent:  var(--text-accent);
+  --pc-code-bg: var(--background-secondary);
+}
+
+/* ============================================================
+   mermaid：收成白灰阶
+   文档里写的 style X fill:#ffdddd 会变成 SVG 内联样式，
+   所以这里必须用 !important 才压得住。
+   思路：形状和文字承担语义，颜色只负责层次，不负责表意。
+   ============================================================ */
+
+.mermaid {
+  --mm-node-bg:    #fcfcfb;   /* 节点底：近白 */
+  --mm-node-line:  #b0b0aa;   /* 节点描边：中灰 */
+  --mm-group-bg:   #f4f4f1;   /* subgraph 底：极浅灰 */
+  --mm-group-line: #d6d6d0;
+  --mm-edge:       #8c8c86;   /* 连线：中灰 */
+  --mm-text:       #1c1c1e;   /* 文字：近黑 */
+}
+
+/* ---------- 节点：矩形 / 圆角 / 菱形 / 圆 ---------- */
+.mermaid .node :is(rect, polygon, circle, ellipse, path):not([style*="fill"]) {
+  fill: var(--mm-node-bg) !important;
+}
+/* 描边对所有节点统一——含彩色节点，这样整体仍然协调 */
+.mermaid .node :is(rect, polygon, circle, ellipse, path) {
+  stroke: var(--mm-node-line) !important;
+  stroke-width: 1.2px !important;
+}
+
+/* 判断节点（菱形）描边略深，靠形状+深浅区分，不靠颜色 */
+.mermaid .node polygon {
+  stroke: #8c8c86 !important;
+}
+
+/* ---------- subgraph 分组 ---------- */
+.mermaid .cluster rect {
+  fill: var(--mm-group-bg) !important;
+  stroke: var(--mm-group-line) !important;
+  stroke-width: 1px !important;
+}
+.mermaid .cluster text,
+.mermaid .cluster-label :is(text, span, p) {
+  fill: var(--mm-text) !important;
+  color: var(--mm-text) !important;
+  font-weight: 600;
+}
+
+/* ---------- 连线与箭头 ---------- */
+.mermaid :is(.edgePath .path, .flowchart-link, .messageLine0, .messageLine1) {
+  stroke: var(--mm-edge) !important;
+  stroke-width: 1.4px !important;
+}
+.mermaid marker :is(path, polygon) {
+  fill: var(--mm-edge) !important;
+  stroke: var(--mm-edge) !important;
+}
+
+/* ---------- 文字 ---------- */
+.mermaid :is(.nodeLabel, .edgeLabel, .label, text, span, p) {
+  color: var(--mm-text) !important;
+  fill: var(--mm-text) !important;
+}
+
+/* 连线上的文字：白底小块，压住穿过的线 */
+.mermaid .edgeLabel :is(rect, .label-container) {
+  fill: #fff !important;
+}
+.mermaid .edgeLabel foreignObject > div,
+.mermaid .edgeLabel .labelBkg {
+  background: #fff !important;
+  background-color: #fff !important;
+}
+
