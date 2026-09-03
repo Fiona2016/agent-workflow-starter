@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-# 幂等：将 starter kit 的 skills/* 软链进 claude 与 codex 的 skills 目录，并报告漂移。
+# 幂等：将 starter kit 的 skills/* 软链进各 agent 的 skills 目录，并报告漂移。
 # 软链的好处：本仓库 git pull 后 skill 自动更新，无需重装。
 # codex 若读 ~/.agents/skills（见仓库根 install.sh 默认值），把它加进 TARGETS。
 set -euo pipefail
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")/../skills" && pwd)"
-TARGETS=("$HOME/.claude/skills" "$HOME/.codex/skills")
+TARGETS=("$HOME/.claude/skills" "$HOME/.codex/skills" "$HOME/.kimi-code/skills")
+
+# 注意：Codex 把 skill 和斜杠命令分成两套——~/.codex/skills 里的 skill 只能由模型
+# 自己搜索调用，手打 /xxx 走的是 ~/.codex/commands/xxx.md。想要斜杠命令见 SETUP.md。
 
 for t in "${TARGETS[@]}"; do mkdir -p "$t"; done
 
