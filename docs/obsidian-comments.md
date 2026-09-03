@@ -105,6 +105,18 @@ flowchart TD
 ````markdown
 （你的正文，一个字都没变）
 
+```tandem-comments
+{
+  "a1f3": {
+    "anchor": { "exact": "大幅降价", "prefix": "三季度应该", "suffix": "，把量" },
+    "status": "open",
+    "thread": [
+      { "author": "me", "ts": "...", "text": "@claude 这结论站不住" },
+      { "author": "Claude", "ts": "...", "text": "同意，缺价格弹性测算……" }
+    ]
+  }
+}
+```
 ````
 
 `anchor` 是「引用原文 + 前后各二十来个字」，靠这个定位批在哪儿。所以：
@@ -163,15 +175,3 @@ graph LR
 ## 一句话总结
 
 **把「审阅意见」从聊天记录里挪回文档上。** 位置自明、无需复述、永久留痕，而且 AI 不需要任何特殊集成就能读懂。
-```tandem-comments
-{
-  "a1f3": {
-    "anchor": { "exact": "大幅降价", "prefix": "三季度应该", "suffix": "，把量" },
-    "status": "open",
-    "thread": [
-      { "author": "me", "ts": "...", "text": "@claude 这结论站不住" },
-      { "author": "Claude", "ts": "...", "text": "同意，缺价格弹性测算……" }
-    ]
-  }
-}
-```
