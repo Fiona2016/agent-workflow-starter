@@ -26,6 +26,21 @@
 
 典型的一天：早上 `/today` 挑 2~3 件事 → 执行卡各派一个新会话（prompt 里带卡路径）→ 各会话干完 `/done` 回写 → 你在「👀 待我审」统一验收 → 有价值的讨论顺手 `/note`。中途冒出的新任务随时 `/card` 收进 Backlog，不打断当前事。
 
+## 工作看板视图：Flow Board
+
+Kanban 插件把 `board.md` 渲染成五列，但卡片只是一行字——想看任务卡内容、PR、报告，得一张张点进原笔记。vault 模板自带一个本地插件 **Flow Board**（`.obsidian/plugins/flow-board/`），在**不改 `board.md` 格式**的前提下换一种看法：
+
+- **打开 `board.md` 自动切到工作看板视图**；需要编辑原文时点右上角「原看板」，在旁边分栏打开 Markdown。
+- **点卡片在右侧展开任务卡全文**，详情栏宽度可拖动并记住。
+- **PR 和报告挂在卡上**：PR 从任务卡 frontmatter `pr:` 和「关联 PR」节里的 GitHub 链接收集；报告读 frontmatter `reports:` 列表，点一下在详情栏里直接读，不用切标签页；「＋ 关联报告」从 `reports/` 里搜一篇写回该卡的 `reports:`。
+- **拖拽移卡**：跨列拖动会整行搬动看板行、同时改任务卡 `status`，任一步失败就回退看板；同列拖动只调顺序，卡片文字一个字不动。
+- **新建卡片**：填标题、目标、验收标准，同时生成任务卡并插到 Backlog 顶部（看板行超 120 字会拒绝）。
+- 顶部有搜索（标题、状态短语、PR、报告名）和「进行中 / 待我审 / 就绪」计数。
+
+看板文件仍然是唯一事实源，插件只是读它、按协议的规矩改它，所以 agent 照常按纯文本改 `board.md`，两边互不干扰。
+
+> 拖拽改 `status` 用的是 Obsidian 的 frontmatter API，它重写 frontmatter 时会**去掉行内 `#` 注释**。所以模板里的注释在卡第一次被拖动后就会消失，属正常现象。
+
 ## 批注协作：把意见写在文档上
 
 看板管"任务"，批注管"意见"。agent 写完一份文档给你审，你读的时候心里的意见——这段结论站不住、那里漏了个情况——原本只能回终端用嘴复述，位置说不清、语言要重组、事后翻不回来。
@@ -102,7 +117,7 @@ agent 写的文档里 mermaid 图很多，默认配色偏花，一页里几张�
 
 - **一卡一工作会话**：卡是任务的账本，会话是干活的现场；一对一才能让回写和回溯不糊。会话内部开子 agent 并行干活是实现细节，不违反此规则。
 - **join key 是卡路径，不是 session ID**：派发时 session 还不存在，卡路径是唯一两边都有的东西；session ID 反向登记进卡（会话指针）。
-- **一类东西一个家**：任务的账在任务卡、认知在 `inbox/`、报告在 `reports/`、产出在 `work/`——判据表见 [vault-template/README.md](vault-template/README.md)。
+- **一类东西一个家**：任务的账在任务卡、认知在 `inbox/`、报告在 `reports/`（按月份子目录 `reports/YYYY-MM/` 存，卡上用 `reports:` 记完整路径）、产出在 `work/`——判据表见 [vault-template/README.md](vault-template/README.md)。
 - **未完成也要回写**：卡不许静默留在「进行中」，卡点本身就是有价值的记录。
 - **agent 不改正文，只提案**：批注里给 `suggestion`，接受与否是人点一下的事。审阅权留在人手里，这条不许抄近路。
 - **署名即身份**：多 agent 协作时"谁答过了"全靠署名判断，冒名会让两个 agent 在同一条批注里反复抢答。
@@ -116,7 +131,7 @@ agent-workflow-starter/
 ├── docs/               # 批注协作详解
 ├── skills/             # card / today / done / note / comments
 ├── bin/sync-skills.sh  # 软链安装，git pull 自动更新
-└── vault-template/     # vault 骨架：五列看板 + 任务卡模板 + Obsidian 配置与 CSS
+└── vault-template/     # vault 骨架：五列看板 + 任务卡模板 + Obsidian 配置、CSS 与 Flow Board 插件
 ```
 
 安装见 [SETUP.md](SETUP.md)。
