@@ -1,0 +1,9 @@
+{
+  "id": "flow-board",
+  "name": "Flow Board",
+  "version": "0.4.0",
+  "minAppVersion": "1.4.0",
+  "description": "A focused view of the existing Markdown task board with inline task details and PR links.",
+  "author": "Fiona",
+  "isDesktopOnly": false
+}

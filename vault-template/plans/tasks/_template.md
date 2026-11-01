@@ -5,6 +5,7 @@ status: backlog       # backlog | ready | running | review | done
 branch:
 pr:
 created:
+reports: []           # 关联报告的完整 vault 相对路径列表；包含月份子目录，如 reports/2026-09/YYYY-MM-DD-<slug>.md
 ---
 
 # 任务标题

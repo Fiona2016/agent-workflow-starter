@@ -3,6 +3,7 @@
 ## 前置
 
 - **Obsidian** + 社区插件 **Kanban**（设置 → 第三方插件 → 浏览 → 搜 "Kanban" 安装并启用）
+- （模板自带）本地插件 **Flow Board**：看板的卡片详情 / 拖拽 / PR 与报告视图，见 [README](README.md#工作看板视图flow-board)
 - **Claude Code** CLI（skills 目录 `~/.claude/skills`）
 - **Codex** CLI，版本需支持 skills（默认按 `~/.codex/skills`；若你的版本读 `~/.agents/skills`，见第 3 步注释）
 - （可选）**Kimi Code** CLI（skills 目录 `~/.kimi-code/skills`）
@@ -17,7 +18,7 @@ cp -R agent-workflow-starter/vault-template ~/workspace/vault
 cd ~/workspace/vault && git init && git add -A && git commit -m "init vault"
 ```
 
-用 Obsidian「打开文件夹作为仓库」打开 `~/workspace/vault`，启用 Kanban 插件，打开 `plans/board.md` 应看到五列看板。
+用 Obsidian「打开文件夹作为仓库」打开 `~/workspace/vault`，启用 Kanban 插件；再到「设置 → 第三方插件」打开 **Flow Board**（模板自带，不用下载）。打开 `plans/board.md` 应看到五列的工作看板视图，右上角「原看板」可切回 Kanban 原文。
 
 模板里带了 `.obsidian/`：CSS 片段 `print-clean.css` 已默认启用（排版 + PDF 分页控制 + mermaid 灰阶，说明见 [README](README.md#obsidian-的两处改造)），PDF 导出页边距设为 0（由 CSS 接管）。不想要就到「设置 → 外观 → CSS 片段」关掉。
 

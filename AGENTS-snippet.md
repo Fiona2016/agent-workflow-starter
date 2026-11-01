@@ -5,6 +5,7 @@
 - 看板：`plans/board.md`，Obsidian Kanban 格式（`## 列名` 为列、`- [ ]` 为卡片）。
   列：`## 💡 Backlog` / `## 📋 Ready` / `## 🤖 Agent 进行中` / `## 👀 待我审` / `## ✅ Done（本周）`
 - 任务卡：`plans/tasks/YYYY-MM-DD-<slug>.md`（模板 `plans/tasks/_template.md`），含 repo、背景、目标、验收标准、执行记录。
+- **任务卡关联报告**：frontmatter `reports:` 是完整的 vault 相对路径列表（包含月份等子目录，如 `- "reports/2026-09/YYYY-MM-DD-主题.md"`），记录这张卡产出的所有报告，不把报告链接塞进看板行。跟进卡片时发现相关报告就补进列表；写出 `reports/` 下的新报告且有关联任务卡时，当次就回写该卡的 `reports:`，去重保留已有条目。
 
 当你承接一个执行任务（任务卡派发）时：
 

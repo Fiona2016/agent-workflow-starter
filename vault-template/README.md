@@ -3,10 +3,10 @@
 个人工作流 vault（Obsidian）。规则：一类东西只有一个家。
 
 - `inbox/` 快速捕获（/note 落点），每周五清空归位
-- `plans/` 任务层：`board.md` 看板 + `tasks/` 任务卡
+- `plans/` 任务层：`board.md` 看板 + `tasks/` 任务卡（用 Flow Board 插件看）
 - `work/` 项目类：进行中工作的调研、方案、产出
 - `areas/` 长期维护类：okr、weekly-review、learning…（按需建）
-- `reports/` 报告输出：日报/周报/调研报告统一落这里
+- `reports/` 报告输出：日报/周报/调研报告统一落这里，按月份分子目录 `reports/YYYY-MM/`；有关联任务卡的，回写到卡的 `reports:`
 - `attachments/` 贴图与二进制附件
 - `archive/` 完结内容（用到才建）
 
